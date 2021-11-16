@@ -77,3 +77,15 @@ func TestSolveItWithMap(t *testing.T) {
 	}
 
 }
+
+func BenchmarkImportFileToMap(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		ImportFileToMap("real-input.txt")
+	}
+}
+
+func BenchmarkSolveItWithMap(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		SolveItWithMap("real-input.txt")
+	}
+}

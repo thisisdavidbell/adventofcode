@@ -18,6 +18,7 @@ func checkErr(name string, err error) {
 // ImportFileToSlice - read numbers from file into slice
 func ImportFileToSlice(filename string) (numberSlice []int, err error) {
 	f, err := os.Open(filename)
+	defer f.Close()
 	checkErr("Open", err)
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {

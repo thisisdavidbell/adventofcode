@@ -62,3 +62,15 @@ func TestSolveItWithNestedLoops(t *testing.T) {
 		t.Fatalf("SolveItWithNestedLoops didnt returned correct answer. Expected: %v, got: %v", expectedAnswer, answer)
 	}
 }
+
+func BenchmarkImportFileToSlice(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		ImportFileToSlice("real-input.txt")
+	}
+}
+
+func BenchmarkSolveItWithNestedLoops(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		SolveItWithNestedLoops("real-input.txt")
+	}
+}

@@ -11,6 +11,7 @@ import (
 func ImportFileToMap(filename string) (map[int]struct{}, error) {
 	numberMap := make(map[int]struct{})
 	f, err := os.Open(filename)
+	defer f.Close()
 	checkErr("Open", err)
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
