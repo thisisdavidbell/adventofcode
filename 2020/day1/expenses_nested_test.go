@@ -7,39 +7,27 @@ import (
 
 // TestHelloName calls greetings.Hello with a name, checking
 // for a valid return value.
-func TestImportFileToMap(t *testing.T) {
-	expectedMap := map[int]struct{}{
-		1721: struct{}{},
-		979:  struct{}{},
-		366:  struct{}{},
-		299:  struct{}{},
-		675:  struct{}{},
-		1456: struct{}{},
-	}
-	gotMap, err := ImportFileToMap("test-input.txt")
+func TestImportFileToSlice(t *testing.T) {
+	var expectedSlice = []int{1721, 979, 366, 299, 675, 1456}
+	gotSlice, err := ImportFileToSlice("test-input.txt")
+
 	if err != nil {
 		t.Fatalf("Test failed with error: %v", err)
 	}
 
-	if !reflect.DeepEqual(expectedMap, gotMap) {
-		t.Fatalf("Slices are not equal.\nExpected: %v, Got: %v", expectedMap, gotMap)
+	if !reflect.DeepEqual(expectedSlice, gotSlice) {
+		t.Fatalf("Slices are not equal.\nExpected: %v, Got: %v", expectedSlice, gotSlice)
 	}
 
 }
 
-func TestFindAnswerUsingMAp(t *testing.T) {
-	numberMap := map[int]struct{}{
-		1721: struct{}{},
-		979:  struct{}{},
-		366:  struct{}{},
-		299:  struct{}{},
-		675:  struct{}{},
-		1456: struct{}{},
-	}
+func TestFindAnswerUsingNestedLoops(t *testing.T) {
+	var numberSlice = []int{1721, 979, 366, 299, 675, 1456}
 
 	expectedProd := 1721 * 299
 
-	gotProd, err := FindAnswerUsingMap(numberMap)
+	gotProd, err := FindAnswerUsingNestedLoops(numberSlice)
+
 	if err != nil {
 		t.Fatalf("Test failed, error returned from Find2ValuesUsingNestedLoops. Error: %v", err)
 	}
@@ -49,12 +37,11 @@ func TestFindAnswerUsingMAp(t *testing.T) {
 	}
 }
 
-/*
-func skipTestFindAnswerUsingMap_NoMatch(t *testing.T) {
+func TestFindAnswerUsingNestedLoops_NoMatch(t *testing.T) {
 	var numberSlice = []int{1721, 979, 366, 675, 1456}
 	expectedErrorString := "Not valid values found"
 
-	_, err := FindAnswerUsingMap(numberSlice)
+	_, err := FindAnswerUsingNestedLoops(numberSlice)
 
 	if err == nil {
 		t.Fatal("Find2ValuesUsingNestedLoops did not return error, when no matches.\n")
@@ -64,16 +51,14 @@ func skipTestFindAnswerUsingMap_NoMatch(t *testing.T) {
 		}
 	}
 }
-*/
-// TestSolveItWithMap - perform solution using map
-func TestSolveItWithMap(t *testing.T) {
+
+func TestSolveItWithNestedLoops(t *testing.T) {
 	expectedAnswer := 1721 * 299
-	answer, err := SolveItWithMap("test-input.txt")
+	answer, err := SolveItWithNestedLoops("test-input.txt")
 	if err != nil {
 		t.Fatalf("SolveItWithNestedLoops failed with error: %v", err)
 	}
 	if answer != expectedAnswer {
 		t.Fatalf("SolveItWithNestedLoops didnt returned correct answer. Expected: %v, got: %v", expectedAnswer, answer)
 	}
-
 }
