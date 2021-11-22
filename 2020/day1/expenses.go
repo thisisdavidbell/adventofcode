@@ -9,6 +9,7 @@ import (
 
 // ImportFileToMap - read numbers from file into slice
 func ImportFileToMap(filename string) (map[int]struct{}, error) {
+	//numberMap := make(map[int]struct{}, 200) // would make for a much faster method, but no efficient way to count lines of file...
 	numberMap := make(map[int]struct{})
 	f, err := os.Open(filename)
 	defer f.Close()
@@ -24,7 +25,7 @@ func ImportFileToMap(filename string) (map[int]struct{}, error) {
 
 // FindAnswerUsingMap - use maps to avoid nasty nested loops
 func FindAnswerUsingMap(numberMap map[int]struct{}) (int, error) {
-	for i1, _ := range numberMap {
+	for i1 := range numberMap {
 		if _, ok := numberMap[TARGET-i1]; ok {
 			return i1 * (TARGET - i1), nil
 		}

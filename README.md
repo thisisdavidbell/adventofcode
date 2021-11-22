@@ -1,5 +1,5 @@
 # adventofcode
 
-Working through the advent of code challenges, as a learning exercise.
+Working through the advent of code challenges.
 
 Link: https://adventofcode.com/
