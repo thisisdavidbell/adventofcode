@@ -4,8 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"regexp"
-	"strconv"
 	"strings"
 )
 
@@ -50,18 +48,9 @@ func ImportFileToSlice(filename string) (lineSlice []string, err error) {
 
 // SliceLinesToSliceStruct convert slice of lines to slice of structs
 func SliceLinesToSliceStruct(lineSlice []string) (pwSlice []PWData, err error) {
-	//ToDo: more efficient way, probably fmt.Sscanf
 	for _, line := range lineSlice {
-		myregex := regexp.MustCompile("[-: ]+")
-		theSlice := myregex.Split(line, -1)
-		minVal, _ := strconv.Atoi(theSlice[0])
-		maxVal, _ := strconv.Atoi(theSlice[1])
-		pwData := PWData{
-			min:      minVal,
-			max:      maxVal,
-			letter:   theSlice[2],
-			password: theSlice[3],
-		}
+		pwData := PWData{}
+		fmt.Sscanf(line, "%d-%d %1s: %s", &pwData.min, &pwData.max, &pwData.letter, &pwData.password)
 		pwSlice = append(pwSlice, pwData)
 	}
 	return
