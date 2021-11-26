@@ -8,19 +8,23 @@ import (
 var TARGET int = 2020
 
 func main() {
+	//test answer
 	nestedLoopTestAnswer, err := SolveItWithNestedLoops("test-input.txt")
 	checkErr("Test main.SolveItWithNestedLoops", err)
-	fmt.Printf("NestedLoop test answer: %v\n", nestedLoopTestAnswer)
+	fmt.Printf("\nNestedLoop test answer part1 : %v\n", nestedLoopTestAnswer)
 
+	mapTestAnswer, mapTestAnswer2, err := SolveItWithMap("test-input.txt")
+	checkErr("Test main.SolveItWithMap", err)
+	fmt.Printf("Map test answer part1: %v\n", mapTestAnswer)
+	fmt.Printf("Map test answer part2: %v\n\n", mapTestAnswer2)
+
+	//real answer
 	nestedLoopRealAnswer, err := SolveItWithNestedLoops("real-input.txt")
 	checkErr("Real main.SolveItWithNestedLoops", err)
-	fmt.Printf("NestedLoop test answer: %v\n", nestedLoopRealAnswer)
+	fmt.Printf("NestedLoop real answer part 1: %v\n", nestedLoopRealAnswer)
 
-	mapTestAnswer, err := SolveItWithMap("test-input.txt")
-	checkErr("Test main.SolveItWithMap", err)
-	fmt.Printf("Map test answer: %v\n", mapTestAnswer)
-
-	mapRealAnswer, err := SolveItWithMap("real-input.txt")
+	mapRealAnswer, mapRealAnswer2, err := SolveItWithMap("real-input.txt")
 	checkErr("Real main.SolveItWithMap", err)
-	fmt.Printf("NestedLoop test answer: %v\n", mapRealAnswer)
+	fmt.Printf("\nNestedLoop real answer part 1: %v\n", mapRealAnswer)
+	fmt.Printf("NestedLoop real answer part 2: %v\n", mapRealAnswer2)
 }

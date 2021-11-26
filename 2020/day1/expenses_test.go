@@ -38,14 +38,18 @@ func TestFindAnswerUsingMAp(t *testing.T) {
 	}
 
 	expectedProd := 1721 * 299
+	expectedProd2 := 979 * 366 * 675
 
-	gotProd, err := FindAnswerUsingMap(numberMap)
+	gotProd, gotProd2, err := FindAnswerUsingMap(numberMap)
 	if err != nil {
 		t.Fatalf("Test failed, error returned from Find2ValuesUsingNestedLoops. Error: %v", err)
 	}
 
 	if !(expectedProd == gotProd) {
-		t.Fatalf("Find2ValuesUsingNestedLoops didn't find correct values. Exp: %v, Got: %v", expectedProd, gotProd)
+		t.Fatalf("Find2ValuesUsingMap didn't find correct values part1. Exp: %v, Got: %v", expectedProd, gotProd)
+	}
+	if !(expectedProd2 == gotProd2) {
+		t.Fatalf("Find2ValuesUsingMap didn't find correct values part2. Exp: %v, Got: %v", expectedProd2, gotProd2)
 	}
 }
 
@@ -68,14 +72,17 @@ func skipTestFindAnswerUsingMap_NoMatch(t *testing.T) {
 // TestSolveItWithMap - perform solution using map
 func TestSolveItWithMap(t *testing.T) {
 	expectedAnswer := 1721 * 299
-	answer, err := SolveItWithMap("test-input.txt")
+	expectedAnswer2 := 979 * 366 * 675
+	answer, answer2, err := SolveItWithMap("test-input.txt")
 	if err != nil {
 		t.Fatalf("SolveItWithNestedLoops failed with error: %v", err)
 	}
 	if answer != expectedAnswer {
-		t.Fatalf("SolveItWithNestedLoops didnt returned correct answer. Expected: %v, got: %v", expectedAnswer, answer)
+		t.Fatalf("SolveItWithNestedLoops didnt returned correct answer1. Expected: %v, got: %v", expectedAnswer, answer)
 	}
-
+	if answer2 != expectedAnswer2 {
+		t.Fatalf("SolveItWithNestedLoops didnt returned correct answer2. Expected: %v, got: %v", expectedAnswer2, answer2)
+	}
 }
 
 func BenchmarkImportFileToMap(b *testing.B) {

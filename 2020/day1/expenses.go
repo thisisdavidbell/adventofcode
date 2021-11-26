@@ -24,21 +24,32 @@ func ImportFileToMap(filename string) (map[int]struct{}, error) {
 }
 
 // FindAnswerUsingMap - use maps to avoid nasty nested loops
-func FindAnswerUsingMap(numberMap map[int]struct{}) (int, error) {
+func FindAnswerUsingMap(numberMap map[int]struct{}) (answer1 int, answer2 int, err error) {
 	for i1 := range numberMap {
+		//part1
 		if _, ok := numberMap[TARGET-i1]; ok {
-			return i1 * (TARGET - i1), nil
+			answer1 = i1 * (TARGET - i1)
+		}
+		delete(numberMap, i1) // ToDo more efficient way to sub map
+		//part2
+		for j2 := range numberMap {
+			if _, ok := numberMap[TARGET-i1-j2]; ok {
+				answer2 = i1 * j2 * (TARGET - i1 - j2)
+			}
 		}
 	}
-	return 0, errors.New("Not valid values found")
+	if answer1 == 0 || answer2 == 0 {
+		err = errors.New("No valid values found")
+	}
+	return answer1, answer2, err
 }
 
 // SolveItWithMap find the matching numbers
-func SolveItWithMap(filename string) (answer int, err error) {
+func SolveItWithMap(filename string) (answer int, answer2 int, err error) {
 	numberMap, err := ImportFileToMap(filename)
 	checkErr("SolveItWithMap.ImportFileToMap", err)
 
-	answer, err = FindAnswerUsingMap(numberMap)
+	answer, answer2, err = FindAnswerUsingMap(numberMap)
 	checkErr("SolveItWithMAp.FindAnswerUsingMap", err)
 	return
 }
