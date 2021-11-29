@@ -13,41 +13,41 @@ const TREE string = "#"
 
 func main() {
 	lineSlice, _ := importFileTo2DSlice("test-input.txt")
-	fmt.Printf("Test count: %v\n", countTrees(lineSlice))
+	fmt.Printf("Part 1 test count: %v\n", countTrees(lineSlice, 3, 1))
 
 	realLineSlice, _ := importFileTo2DSlice("real-input.txt")
-	fmt.Printf("Real count: %v\n", countTrees(realLineSlice))
+	fmt.Printf("Part 1 real count: %v\n", countTrees(realLineSlice, 3, 1))
+
+	//quick and dirty
+	fmt.Printf("\nTest Part 2 count: %v\n",
+		countTrees(lineSlice, 1, 1)*
+			countTrees(lineSlice, 3, 1)*
+			countTrees(lineSlice, 5, 1)*
+			countTrees(lineSlice, 7, 1)*
+			countTrees(lineSlice, 1, 2))
+
+	fmt.Printf("Part 2 test count: %v\n",
+		countTrees(realLineSlice, 1, 1)*
+			countTrees(realLineSlice, 3, 1)*
+			countTrees(realLineSlice, 5, 1)*
+			countTrees(realLineSlice, 7, 1)*
+			countTrees(realLineSlice, 1, 2))
 }
 
-func importFileTo2DSlice(filename string) (lineSlice [][]bool, err error) {
+func importFileTo2DSlice(filename string) (lineSlice []string, err error) {
 	f, err := os.Open(filename)
 	defer f.Close()
 	utils.CheckErr("Open", err)
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
-		lineSlice = append(lineSlice, convertLineToSliceOfTrees(scanner.Text()))
+		lineSlice = append(lineSlice, scanner.Text())
 	}
 	return lineSlice, err
 }
 
-func convertLineToSliceOfTrees(line string) (slice []bool) {
-	for _, letter := range line {
-		if string(letter) == TREE {
-			slice = append(slice, true)
-		} else {
-			slice = append(slice, false)
-		}
-	}
-	return slice
-}
-
-func countTrees(grid [][]bool) (count int) {
-	DOWN := 1
-	RIGHT := 3
-
-	for d, r := DOWN, RIGHT; d < len(grid); d, r = d+DOWN, (r+RIGHT)%len(grid[0]) {
-		//fmt.Printf("d: %v, r: %v, tree: %v\n", d, r, grid[d][r])
-		if grid[d][r] {
+func countTrees(grid []string, right int, down int) (count int) {
+	for d, r := down, right; d < len(grid); d, r = d+down, (r+right)%len(grid[0]) {
+		if grid[d][r] == byte('#') {
 			count++
 		}
 	}

@@ -29,12 +29,9 @@ func TestImportFileTo2DSlice(t *testing.T) {
 	}
 }
 
-func TestConvertLineToSlice(t *testing.T) {
-	fileLine := "#...#...#.."
-	expectedSlice := []bool{true, false, false, false, true, false, false, false, true, false, false}
-	gotSlice := convertLineToSliceOfTrees(fileLine)
-
-	if !reflect.DeepEqual(expectedSlice, gotSlice) {
-		t.Fatalf("converLineToSliceOfTrees didnt return correct slice. Expected: %v, got: %v", expectedSlice, gotSlice)
+func BenchmarkPart2EndToEnv(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		realLineSlice, _ := importFileTo2DSlice("real-input.txt")
+		_ = countTrees(realLineSlice, 1, 1) * countTrees(realLineSlice, 3, 1) * countTrees(realLineSlice, 5, 1) * countTrees(realLineSlice, 7, 1) * countTrees(realLineSlice, 1, 2)
 	}
 }
