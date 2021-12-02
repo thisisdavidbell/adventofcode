@@ -1,6 +1,6 @@
 module github.com/thisisdavidbell/adventofcode/2021/day2
 
-go 1.13
+go 1.16
 
 replace github.com/thisisdavidbell/adventofcode/utils => ../../utils
 

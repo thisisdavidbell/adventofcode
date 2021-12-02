@@ -10,6 +10,7 @@ import (
 )
 
 func main() {
+
 	testSlice := readCommandToSlice("test-input.txt")
 	fmt.Printf("Part1 test: %v\n", part1(testSlice))
 	fmt.Printf("Part2 test: %v\n\n", part2(testSlice))
@@ -23,7 +24,6 @@ func main() {
 func part1(commandSlice []command) (sum int) {
 	x, depth := 0, 0
 	for _, com := range commandSlice {
-		//fmt.Printf("in for: %+v\n", com)
 		switch com.direction {
 		case "forward":
 			x = x + com.units
@@ -39,7 +39,6 @@ func part1(commandSlice []command) (sum int) {
 func part2(commandSlice []command) (sum int) {
 	x, depth, aim := 0, 0, 0
 	for _, com := range commandSlice {
-		//fmt.Printf("in for: %+v\n", com)
 		switch com.direction {
 		case "forward":
 			x = x + com.units
@@ -55,7 +54,6 @@ func part2(commandSlice []command) (sum int) {
 
 // readCommandToSlice - read string and int into slice from file
 func readCommandToSlice(filename string) (commandSlice []command) {
-	commandSlice = make([]command, 0)
 	f, err := os.Open(filename)
 	defer f.Close()
 	utils.CheckErr("Open", err)
