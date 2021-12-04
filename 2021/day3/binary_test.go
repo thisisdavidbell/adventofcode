@@ -34,3 +34,17 @@ func BenchmarkPart1StringAll(b *testing.B) {
 		part1String(realStringSlice)
 	}
 }
+
+func BenchmarkPart2(b *testing.B) {
+	realStringMap := utils.ImportFileToStringMap("real-input.txt")
+	for i := 0; i < b.N; i++ {
+		part2(realStringMap)
+	}
+}
+
+func BenchmarkPart2All(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		realStringMap := utils.ImportFileToStringMap("real-input.txt")
+		part2(realStringMap)
+	}
+}
