@@ -57,6 +57,20 @@ func ImportFileToStringSlice(filename string) (stringSlice []string) {
 	return
 }
 
+// ImportFileToStringMap - read file
+func ImportFileToStringMap(filename string) (stringMap map[int]string) {
+	stringMap = make(map[int]string)
+	f, _ := os.Open(filename)
+	defer f.Close()
+	scanner := bufio.NewScanner(f)
+	i := 0
+	for scanner.Scan() {
+		stringMap[i] = scanner.Text()
+		i++
+	}
+	return
+}
+
 // ReadFileToByteSlice - read file into a single long byte slice for whole file
 func ReadFileToByteSlice(filename string) (bytes []byte) {
 	bytes, _ = os.ReadFile(filename)

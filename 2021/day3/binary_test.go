@@ -6,30 +6,31 @@ import (
 	"github.com/thisisdavidbell/adventofcode/utils"
 )
 
-func BenchmarkImportFileToByteSliceSlice(b *testing.B) {
-	// input
+func BenchmarkPart1Bytes(b *testing.B) {
+	realByteSliceSlice := utils.ReadFileToByteSliceSlice("real-input.txt")
 	for i := 0; i < b.N; i++ {
-		utils.ImportFileToByteSliceSlice("real-input-txt")
+		part1Bytes(realByteSliceSlice)
+	}
+}
+func BenchmarkPart1BytesAll(b *testing.B) {
+
+	for i := 0; i < b.N; i++ {
+		realByteSliceSlice := utils.ReadFileToByteSliceSlice("real-input.txt")
+		part1Bytes(realByteSliceSlice)
 	}
 }
 
-func BenchmarkImportFileToStringSlice(b *testing.B) {
-	// input
+func BenchmarkPart1String(b *testing.B) {
+	realStringSlice := utils.ReadFileToStringSlice("real-input.txt")
 	for i := 0; i < b.N; i++ {
-		utils.ImportFileToStringSlice("real-input-txt")
+		part1String(realStringSlice)
 	}
 }
 
-func BenchmarkReadFileToByteSlice(b *testing.B) {
-	// input
-	for i := 0; i < b.N; i++ {
-		utils.ReadFileToByteSlice("real-input-txt")
-	}
-}
+func BenchmarkPart1StringAll(b *testing.B) {
 
-func BenchmarkReadFileToByteByteSlice(b *testing.B) {
-	// input
 	for i := 0; i < b.N; i++ {
-		utils.ReadFileToByteSliceSlice("real-input-txt")
+		realStringSlice := utils.ReadFileToStringSlice("real-input.txt")
+		part1String(realStringSlice)
 	}
 }
