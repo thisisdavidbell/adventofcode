@@ -2,9 +2,11 @@ package utils
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 )
 
 // CheckErr -  check for errors
@@ -27,4 +29,54 @@ func ImportFileToIntSlice(filename string) (numberSlice []int) {
 		numberSlice = append(numberSlice, theInt)
 	}
 	return numberSlice
+}
+
+// ImportFileToByteSliceSlice - read file
+func ImportFileToByteSliceSlice(filename string) (byteSlice [][]byte) {
+	f, _ := os.Open(filename)
+	defer f.Close()
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		scannedBytes := scanner.Bytes()
+		length := len(scannedBytes)
+		theBytes := make([]byte, length, length) // https://pkg.go.dev/bufio#Scanner.Bytes states: The underlying array may point to data that will be overwritten by a subsequent call to Scan. It does no allocation.
+		copy(theBytes, scanner.Bytes())
+		byteSlice = append(byteSlice, theBytes)
+	}
+	return byteSlice
+}
+
+// ImportFileToStringSlice - read file
+func ImportFileToStringSlice(filename string) (stringSlice []string) {
+	f, _ := os.Open(filename)
+	defer f.Close()
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		stringSlice = append(stringSlice, scanner.Text())
+	}
+	return
+}
+
+// ReadFileToByteSlice - read file into a single long byte slice for whole file
+func ReadFileToByteSlice(filename string) (bytes []byte) {
+	bytes, _ = os.ReadFile(filename)
+	return
+}
+
+// ReadFileToByteSliceSlice - read file with os.ReadFile then create slice
+func ReadFileToByteSliceSlice(filename string) (byteSlice [][]byte) {
+	theBytes := ReadFileToByteSlice(filename)
+	return bytes.Split(theBytes, []byte("\n"))
+}
+
+// ReadFileToString - read file into a single long byte slice for whole file
+func ReadFileToString(filename string) string {
+	str, _ := os.ReadFile(filename)
+	return string(str)
+}
+
+// ReadFileToStringSlice - read file with os.ReadFile then create slice
+func ReadFileToStringSlice(filename string) (stringSlice []string) {
+	str := ReadFileToString(filename)
+	return strings.Split(str, "\n")
 }
