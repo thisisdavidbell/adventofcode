@@ -17,6 +17,7 @@ go pprof link: https://pkg.go.dev/runtime/pprof#hdr-Profiling_a_Go_program
   - `list part2`
 
 Benchmark results:
+(Methods all available at commit: cd28ba379b0a20168ed4eeed1d007c1df8db1381)
 go 1.16.10
 ```
 BenchmarkReadCommandToSlice-16    	    1386	    808222 ns/op
@@ -26,7 +27,7 @@ BenchmarkPart2LetterOnly-16       	  792643	      1480 ns/op   <=== using single
 
 BenchmarkAll2-16                  	    1506	    784907 ns/op   <=== first pass
 BenchmarkPerfPart2-16             	    1420	    770575 ns/op   <=== using single read and process function
-BenchmarkPerfPart2Cast-16         	    1593	    744403 ns/op   <=== use atrconv.Atoi for cast not Sscanf
+BenchmarkPerfPart2Cast-16         	    1593	    744403 ns/op   <=== use atrconv.Atoi for cast not Sscanf - NOW CALLED part2()
 ```
 
 go 1.13.10

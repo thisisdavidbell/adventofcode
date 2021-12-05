@@ -8,12 +8,14 @@ import (
 )
 
 func main() {
-	fmt.Printf("Test Part 1: %v\n", part1String(utils.ReadFileToStringSlice("test-input.txt")))
-	fmt.Printf("Real Part 1: %v\n", part1String(utils.ReadFileToStringSlice("real-input.txt")))
-	fmt.Printf("Real Part2: %v\n", part2SliceReuse(utils.ReadFileToByteSliceSlice("real-input.txt")))
+	fmt.Printf("Test Part 1: %v\n", part1(utils.ReadFileToStringSlice("test-input.txt")))
+	fmt.Printf("Test Part 2: %v\n\n", part2(utils.ReadFileToByteSliceSlice("test-input.txt")))
+
+	fmt.Printf("Real Part 1: %v\n", part1(utils.ReadFileToStringSlice("real-input.txt")))
+	fmt.Printf("Real Part 2: %v\n", part2(utils.ReadFileToByteSliceSlice("real-input.txt")))
 }
 
-func part1String(slice []string) (power int64) {
+func part1(slice []string) (power int64) {
 	numChars := len(slice[0])
 	numLines := len(slice)
 	gamma := make([]byte, 0, numChars)
@@ -40,7 +42,7 @@ func part1String(slice []string) (power int64) {
 	return gammaInt * epsilonInt
 }
 
-func part2SliceReuse(oxygenSlice [][]byte) (power int64) {
+func part2(oxygenSlice [][]byte) (power int64) {
 
 	co2Slice := make([][]byte, len(oxygenSlice))
 	copy(co2Slice, oxygenSlice)
