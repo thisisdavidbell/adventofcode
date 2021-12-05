@@ -35,16 +35,72 @@ func BenchmarkPart1StringAll(b *testing.B) {
 	}
 }
 
-func BenchmarkPart2(b *testing.B) {
+func BenchmarkPart2OnePass(b *testing.B) {
 	realStringMap := utils.ImportFileToStringMap("real-input.txt")
 	for i := 0; i < b.N; i++ {
-		part2(realStringMap)
+		part2OnePass(realStringMap)
 	}
 }
 
-func BenchmarkPart2All(b *testing.B) {
+func BenchmarkPart2Loops(b *testing.B) {
+	realStringMap := utils.ImportFileToStringMap("real-input.txt")
+	for i := 0; i < b.N; i++ {
+		part2Loops(realStringMap)
+	}
+}
+
+func BenchmarkPart2Delete(b *testing.B) {
+	realStringMap := utils.ImportFileToStringMap("real-input.txt")
+	for i := 0; i < b.N; i++ {
+		part2Delete(realStringMap)
+	}
+}
+
+func BenchmarkPart2Slice(b *testing.B) {
+	realStringSlice := utils.ReadFileToByteSliceSlice("real-input.txt")
+	for i := 0; i < b.N; i++ {
+		part2Slice(realStringSlice)
+	}
+}
+
+func BenchmarkPart2SliceReuse(b *testing.B) {
+	realStringSlice := utils.ReadFileToByteSliceSlice("real-input.txt")
+	for i := 0; i < b.N; i++ {
+		part2SliceReuse(realStringSlice)
+	}
+}
+
+func BenchmarkPart2OnePassAll(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		realStringMap := utils.ImportFileToStringMap("real-input.txt")
-		part2(realStringMap)
+		part2OnePass(realStringMap)
+	}
+}
+
+func BenchmarkPart2LoopsAll(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		realStringMap := utils.ImportFileToStringMap("real-input.txt")
+		part2Loops(realStringMap)
+	}
+}
+
+func BenchmarkPart2DeleteAll(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		realStringMap := utils.ImportFileToStringMap("real-input.txt")
+		part2Delete(realStringMap)
+	}
+}
+
+func BenchmarkPart2SliceAll(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		realStringSlice := utils.ReadFileToByteSliceSlice("real-input.txt")
+		part2Slice(realStringSlice)
+	}
+}
+
+func BenchmarkPart2SliceReuseAll(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		realStringSlice := utils.ReadFileToByteSliceSlice("real-input.txt")
+		part2SliceReuse(realStringSlice)
 	}
 }
