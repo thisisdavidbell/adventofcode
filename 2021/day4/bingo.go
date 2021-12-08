@@ -27,10 +27,12 @@ func allPart1(filename string) int {
 
 func part1(nums []string, boards [][][]string) int {
 
-	for n := 0; n < len(nums); n++ {
+	numbersMap := make(map[string]struct{})
+	for _, n := range nums {
+		numbersMap[n] = struct{}{}
 		for _, b := range boards {
-			if checkBoardWins(nums[:n+1], b) {
-				return calculateAnswer(b, nums[:n+1], n)
+			if checkBoardWins(numbersMap, b) {
+				return calculateAnswer(b, numbersMap, n)
 			}
 		}
 	}
@@ -44,14 +46,15 @@ func allPart2(filename string) int {
 }
 
 func part2(nums []string, boards [][][]string) int {
-	//numbersMap := make(map[string]struct{})
+	numbersMap := make(map[string]struct{})
 	winningBoards := make(map[int]struct{})
-	for n := 0; n < len(nums); n++ {
+	for _, n := range nums {
+		numbersMap[n] = struct{}{}
 		for boardKey, b := range boards {
-			if checkBoardWins(nums[:n+1], b) {
+			if checkBoardWins(numbersMap, b) {
 				winningBoards[boardKey] = struct{}{}
 				if len(winningBoards) == len(boards) {
-					return calculateAnswer(b, nums[:n+1], n)
+					return calculateAnswer(b, numbersMap, n)
 				}
 
 			}
@@ -76,15 +79,15 @@ func readBingoInputToSlices(filename string) (numbers []string, boards [][][]str
 	return
 }
 
-func checkBoardWins(numbers []string, board [][]string) bool {
+func checkBoardWins(numbers map[string]struct{}, board [][]string) bool {
 
 	matched := false
 
 	//check row
-	for r := 0; r < len(board); r++ {
+	for _, r := range board {
 		matched = true
-		for c := 0; c < len(board[0]); c++ {
-			if !numInNumbers(board[r][c], numbers) {
+		for _, c := range r {
+			if _, ok := numbers[c]; !ok {
 				matched = false
 			}
 		}
@@ -98,7 +101,7 @@ func checkBoardWins(numbers []string, board [][]string) bool {
 	for c := 0; c < len(board[0]); c++ {
 		matched = true
 		for r := 0; r < len(board); r++ {
-			if !numInNumbers(board[r][c], numbers) {
+			if _, ok := numbers[board[r][c]]; !ok {
 				matched = false
 			}
 		}
@@ -110,30 +113,16 @@ func checkBoardWins(numbers []string, board [][]string) bool {
 
 }
 
-func numInNumbers(num string, numbers []string) bool {
-	//	fmt.Printf("Checking num %v in numbers %v\n", num, numbers)
-	for _, n := range numbers {
-		if n == num {
-			//		fmt.Println("FOUND")
-			return true
-		}
-	}
-
-	return false
-}
-func calculateAnswer(board [][]string, numbers []string, lastNum int) (answer int) {
-	//	fmt.Printf("FOUND WINNER: board: %v, numbers: %v, lastNum: %v\n", board, numbers, lastNum)
+func calculateAnswer(board [][]string, numbersMap map[string]struct{}, lastNum string) (answer int) {
 	total := 0
 	for r := range board {
 		for c := range board[r] {
-			if !numInNumbers(board[r][c], numbers) {
+			if _, ok := numbersMap[board[r][c]]; !ok {
 				theInt, _ := strconv.Atoi(board[r][c])
-				//				fmt.Printf("NOT MATCHED %v, adding to total: %v\n", board[r][c], total)
 				total += theInt
 			}
 		}
 	}
-	//	fmt.Printf("lastnum: %v\n", lastNum)
-	lastNumInt, _ := strconv.Atoi(numbers[lastNum])
+	lastNumInt, _ := strconv.Atoi(lastNum)
 	return total * lastNumInt
 }
