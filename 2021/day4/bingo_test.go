@@ -4,9 +4,16 @@ import (
 	"testing"
 )
 
-func BenchmarkPart2Only(b *testing.B) {
+func BenchmarkAllPart2(b *testing.B) {
 	// input
 	for i := 0; i < b.N; i++ {
-		part2(realSlice)
+		allPart2("real-input.txt")
+	}
+}
+
+func BenchmarkPart2(b *testing.B) {
+	nums, boards := readBingoInputToSlices("real-input.txt")
+	for i := 0; i < b.N; i++ {
+		part2(nums, boards)
 	}
 }
