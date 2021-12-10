@@ -12,29 +12,25 @@ func main() {
 
 	fmt.Printf("Test Part 1: %v\n", allPart1("test-input.txt"))
 	fmt.Printf("Test Part 2: %v\n\n", allPart2("test-input.txt"))
-	fmt.Printf("Test Part 2: %v\n\n", allPart2Perf("test-input.txt"))
 
 	fmt.Printf("Real Part 1: %v\n", allPart1("real-input.txt"))
 	fmt.Printf("Real Part 2: %v\n\n", allPart2("real-input.txt"))
-	fmt.Printf("Real Perf Part 2: %v\n\n", allPart2Perf("real-input.txt"))
 
 }
 
 var boardSize int = 5
 
 func allPart1(filename string) int {
-	nums, boards := readBingoInputToSlices(filename)
+	nums, boards := readBingoInputToMaps(filename)
 	return part1(nums, boards)
 }
 
-func part1(nums []string, boards [][][]string) int {
+func part1(nums []string, boards [][]map[string]struct{}) int {
 
-	numbersMap := make(map[string]struct{})
 	for _, n := range nums {
-		numbersMap[n] = struct{}{}
 		for _, b := range boards {
-			if checkBoardWins(numbersMap, b) {
-				return calculateAnswer(b, numbersMap, n)
+			if checkBoardWins(n, b) {
+				return calculateAnswer(n, b)
 			}
 		}
 	}
@@ -43,66 +39,32 @@ func part1(nums []string, boards [][][]string) int {
 }
 
 func allPart2(filename string) int {
-	nums, boards := readBingoInputToSlices(filename)
+	nums, boards := readBingoInputToMaps(filename)
 	return part2(nums, boards)
 }
 
-func part2(nums []string, boards [][][]string) int {
-	numbersMap := make(map[string]struct{})
-	winningBoards := make(map[int]struct{})
-	for key, n := range nums {
-		numbersMap[n] = struct{}{}
-		for boardKey, b := range boards {
-			//change to only take in the latest number - board object replacement must maintain state
-			if key < 4 {
-				continue
-			}
-			if checkBoardWins(numbersMap, b) {
-				winningBoards[boardKey] = struct{}{}
-				if len(winningBoards) == len(boards) {
-					// WRONG - unchecked numbers are what is left !! orig: need a way (if we removed numbers during checkBoardWins) to have full board for score...
-					return calculateAnswer(b, numbersMap, n)
-				}
-			}
-		}
-	}
-	return 0
-}
+func part2(nums []string, boards [][]map[string]struct{}) int {
 
-func allPart2Perf(filename string) int {
-	nums, boards := readBingoInputToMaps(filename)
-	return part2Perf(nums, boards)
-}
-
-func part2Perf(nums []string, boards [][]map[string]struct{}) int {
 	winningBoards := make(map[int]struct{})
 	for _, n := range nums {
-		for boardKey, b := range boards {
-			if checkBoardWinsPerf(n, b) {
+		for boardKey := 0; boardKey < len(boards); boardKey++ {
+			if checkBoardWins(n, boards[boardKey]) {
 				winningBoards[boardKey] = struct{}{}
 				if len(winningBoards) == len(boards) {
-					return calculateAnswerPerf(n, b)
+					//if len(boards) == 1 {
+					return calculateAnswer(n, boards[boardKey])
 				}
+				//boards = removeBoard(boards, boardKey)
+				//boardKey--
 			}
 		}
 	}
 	return 0
 }
 
-func readBingoInputToSlices(filename string) (numbers []string, boards [][][]string) {
-	numbers = make([]string, 0)
-	boards = make([][][]string, 0)
-	input := utils.ReadFileToStringSlice(filename)
-	numbers = strings.Split(input[0], ",")
-
-	for i := 2; i < len(input); i++ {
-		aBoard := make([][]string, 0)
-		for ; i < len(input) && input[i] != ""; i++ {
-			aBoard = append(aBoard, strings.Fields(input[i]))
-		}
-		boards = append(boards, aBoard)
-	}
-	return
+func removeBoard(boards [][]map[string]struct{}, index int) [][]map[string]struct{} {
+	boards[index] = boards[0]
+	return boards[1:]
 }
 
 // a board is just a set of winnable Maps (i.e. a row or a column) - Maps so can remove
@@ -137,41 +99,23 @@ func readBingoInputToMaps(filename string) (numbers []string, boards [][]map[str
 	return
 }
 
-func checkBoardWins(numbers map[string]struct{}, board [][]string) bool {
+func readBingoInputToSlices(filename string) (numbers []string, boards [][][]string) {
+	numbers = make([]string, 0)
+	boards = make([][][]string, 0)
+	input := utils.ReadFileToStringSlice(filename)
+	numbers = strings.Split(input[0], ",")
 
-	matched := false
-
-	//check row
-	for _, r := range board {
-		matched = true
-		for _, c := range r {
-			if _, ok := numbers[c]; !ok {
-				matched = false
-			}
+	for i := 2; i < len(input); i++ {
+		aBoard := make([][]string, 0)
+		for ; i < len(input) && input[i] != ""; i++ {
+			aBoard = append(aBoard, strings.Fields(input[i]))
 		}
-		if matched {
-			return true
-		}
+		boards = append(boards, aBoard)
 	}
-
-	// check columns
-	matched = false
-	for c := 0; c < len(board[0]); c++ {
-		matched = true
-		for r := 0; r < len(board); r++ {
-			if _, ok := numbers[board[r][c]]; !ok {
-				matched = false
-			}
-		}
-		if matched {
-			return true
-		}
-	}
-	return false
-
+	return
 }
 
-func checkBoardWinsPerf(number string, board []map[string]struct{}) bool {
+func checkBoardWins(number string, board []map[string]struct{}) bool {
 
 	//check row
 	won := false
@@ -188,21 +132,7 @@ func checkBoardWinsPerf(number string, board []map[string]struct{}) bool {
 	return won
 }
 
-func calculateAnswer(board [][]string, numbersMap map[string]struct{}, lastNum string) (answer int) {
-	total := 0
-	for r := range board {
-		for c := range board[r] {
-			if _, ok := numbersMap[board[r][c]]; !ok {
-				theInt, _ := strconv.Atoi(board[r][c])
-				total += theInt
-			}
-		}
-	}
-	lastNumInt, _ := strconv.Atoi(lastNum)
-	return total * lastNumInt
-}
-
-func calculateAnswerPerf(number string, board []map[string]struct{}) (answer int) {
+func calculateAnswer(number string, board []map[string]struct{}) (answer int) {
 	total := 0
 	for s := range board {
 		for c := range board[s] {

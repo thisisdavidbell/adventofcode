@@ -20,10 +20,17 @@ go pprof link: https://pkg.go.dev/runtime/pprof#hdr-Profiling_a_Go_program
 Benchmark results:
 
 ```
-BenchmarkAllPart2-16    	     100	  10038436 ns/op
-BenchmarkPart2-16       	     123	   9615733 ns/op
+BenchmarkReadBingoInputToSlices-16    	    8286	    142926 ns/op
+BenchmarkAllPart2-16    	                   100	  10038436 ns/op
+BenchmarkPart2-16       	                   123	   9615733 ns/op <- scanning whole board for all numbers every time
 
-BenchmarkPart2Perf-16    	    1874	    643983 ns/op <= map deletion approach
+BenchmarkReadBingoInputToMaps-16      	    3255	    374239 ns/op
+BenchmarkAllPart2-16                  	     163	   7116813 ns/op  <- profiling bug? is 7x the sum of the 2 it ctually runs...
+BenchmarkPart2-16                     	    2613	    448427 ns/op  <- removing matches numbers from map, so scanning remaining board for latest number only
+
+BenchmarkPart2-16                     	    1755	    630866 ns/op <= deleting board when it wins <- overhead of slice manipulation clearly way more than gain
+
+
 ```
 
 Profile:
