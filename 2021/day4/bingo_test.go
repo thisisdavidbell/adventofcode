@@ -17,3 +17,10 @@ func BenchmarkPart2(b *testing.B) {
 		part2(nums, boards)
 	}
 }
+
+func BenchmarkPart2Perf(b *testing.B) {
+	nums, boards := readBingoInputToMaps("real-input.txt")
+	for i := 0; i < b.N; i++ {
+		part2Perf(nums, boards)
+	}
+}
