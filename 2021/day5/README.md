@@ -20,6 +20,6 @@ go pprof link: https://pkg.go.dev/runtime/pprof#hdr-Profiling_a_Go_program
 Benchmark results:
 
 ```
-HERE
+BenchmarkPart2-16    	     236	   5013090 ns/op
 
 ```

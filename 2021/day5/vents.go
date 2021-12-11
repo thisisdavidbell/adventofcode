@@ -2,18 +2,16 @@ package main
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/thisisdavidbell/adventofcode/utils"
 )
 
 func main() {
 	fmt.Printf("Test Part 1: %v\n", part1("test-input.txt"))
+	fmt.Printf("Test Part 2: %v\n\n", part2("test-input.txt"))
 
 	fmt.Printf("Real Part 1: %v\n", part1("real-input.txt"))
-
-	//	fmt.Printf("Real Part 1: %v\n", part1(realSlice))
-	//	fmt.Printf("Real Part 2: %v\n", part2(realslice))
+	fmt.Printf("Real Part 2: %v\n", part2("real-input.txt"))
 }
 
 func part1(filename string) (count int) {
@@ -27,14 +25,15 @@ func part1(filename string) (count int) {
 	return countNumIntersects(grid)
 }
 
-/*
-func part2() () {
-
-	return
+func part2(filename string) (count int) {
+	lines, maxX, maxY := readInputs(filename)
+	grid := createGrid(maxX, maxY)
+	for _, aLine := range lines {
+		applyCoords(aLine, grid)
+	}
+	return countNumIntersects(grid)
 }
-*/
 
-// read input into ?
 func readInputs(filename string) (linesCoords []line, maxX int, maxY int) {
 	fileLines := utils.ReadFileToStringSlice(filename)
 	linesCoords = make([]line, 0, len(fileLines))
@@ -76,33 +75,34 @@ func isHorizVertLine(aLine line) bool {
 	return false
 }
 
-// apply co-ord to grid
-// drb: consider if code works with a single point (i.e. x1,y1=x2,y2)
 func applyCoords(aLine line, grid [][]int) {
+	incX, stopX := 0, 0
+	incY, stopY := 0, 0
 	if aLine.x1 == aLine.x2 {
-		if aLine.y1 >= aLine.y2 {
-			for i := aLine.y2; i != aLine.y1+1; i++ {
-				grid[aLine.x1][i]++
-			}
-		} else {
-			for i := aLine.y2; i != aLine.y1-1; i-- {
-				grid[aLine.x1][i]++
-			}
-		}
-	} else if aLine.y1 == aLine.y2 {
-		if aLine.x1 >= aLine.x2 {
-			for i := aLine.x2; i != aLine.x1+1; i++ {
-				grid[i][aLine.y1]++
-			}
-		} else {
-			for i := aLine.x2; i != aLine.x1-1; i-- {
-				grid[i][aLine.y1]++
-			}
-		}
-	} else {
-		fmt.Errorf("ERROR: we should never get here")
-		os.Exit(1)
+		incX = 0
+		stopX = aLine.x1 + 1
+	} else if aLine.x1 < aLine.x2 {
+		incX = 1
+		stopX = aLine.x2 + 1
+	} else { //(aLine.x1 > aLine.x2)
+		incX = -1
+		stopX = aLine.x2 - 1
 	}
+	if aLine.y1 == aLine.y2 {
+		incY = 0
+		stopY = aLine.y1 + 1
+	} else if aLine.y1 < aLine.y2 {
+		incY = 1
+		stopY = aLine.y2 + 1
+	} else { //(aLine.y1 > aLine.y2)
+		incY = -1
+		stopY = aLine.y2 - 1
+	}
+
+	for x, y := aLine.x1, aLine.y1; x != stopX && y != stopY; x, y = x+incX, y+incY {
+		grid[x][y]++
+	}
+
 }
 
 // countNumIntersects in grid
@@ -128,7 +128,6 @@ func printGrid(grid [][]int) {
 
 }
 
-//struct for point? so []point
 type line struct {
 	x1, y1, x2, y2 int
 }
