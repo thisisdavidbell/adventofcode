@@ -8,10 +8,10 @@ import (
 
 func main() {
 	fmt.Printf("Test Part 1: %v\n", part1("test-input.txt"))
-	fmt.Printf("Test Part 2: %v\n\n", part2("test-input.txt"))
+	fmt.Printf("Test Part 2: %v\n\n", part2All("test-input.txt"))
 
 	fmt.Printf("Real Part 1: %v\n", part1("real-input.txt"))
-	fmt.Printf("Real Part 2: %v\n", part2("real-input.txt"))
+	fmt.Printf("Real Part 2: %v\n", part2All("real-input.txt"))
 }
 
 func part1(filename string) (count int) {
@@ -25,8 +25,11 @@ func part1(filename string) (count int) {
 	return countNumIntersects(grid)
 }
 
-func part2(filename string) (count int) {
+func part2All(filename string) (count int) {
 	lines, maxX, maxY := readInputs(filename)
+	return part2(lines, maxX, maxY)
+}
+func part2(lines []line, maxX int, maxY int) (count int) {
 	grid := createGrid(maxX, maxY)
 	for _, aLine := range lines {
 		applyCoords(aLine, grid)

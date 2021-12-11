@@ -4,9 +4,16 @@ import (
 	"testing"
 )
 
-func BenchmarkPart2(b *testing.B) {
+func BenchmarkPart2All(b *testing.B) {
 	// input
 	for i := 0; i < b.N; i++ {
-		part2("real-input.txt")
+		part2All("real-input.txt")
+	}
+}
+
+func BenchmarkPart2(b *testing.B) {
+	lines, maxX, maxY := readInputs("real-input.txt")
+	for i := 0; i < b.N; i++ {
+		part2(lines, maxX, maxY)
 	}
 }
