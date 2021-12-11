@@ -51,6 +51,12 @@ readInputs line:
 .      530ms     29:	lines, maxX, maxY := readInputs(filename)
 ```
 
+### Perf Thoughts:
+- roughly similar time spent:
+  - reading reading inputs
+  - creating grid
+  - applying lines
+
 # First Analysis
 Orig 1st pass benchmark, including looking up result across whole grid:
 
@@ -90,7 +96,7 @@ list part2:
 .          .     35:}
 .          .     36:
 ```
-Perf thoughts:
+### Perf thoughts:
 - creation of grid fairly expensive single action
 - applying lines we do 500 times, but each action is not so bad, as you only work with few points you need
 - checking result is expensive as it traverses whole grid 900x900 grid

@@ -19,10 +19,10 @@ func part1(filename string) (count int) {
 	grid := createGrid(maxX, maxY)
 	for _, aLine := range lines {
 		if isHorizVertLine(aLine) {
-			applyCoords(aLine, grid, 0)
+			count = applyCoords(aLine, grid, count)
 		}
 	}
-	return countNumIntersects(grid)
+	return count //countNumIntersects(grid)
 }
 
 func part2All(filename string) int {
@@ -108,18 +108,6 @@ func applyCoords(aLine line, grid [][]int, count int) int {
 		grid[x][y]++
 		if grid[x][y] == 2 {
 			count++
-		}
-	}
-	return count
-}
-
-// countNumIntersects in grid
-func countNumIntersects(grid [][]int) (count int) {
-	for y := 0; y < len(grid[0]); y++ {
-		for x := 0; x < len(grid); x++ {
-			if grid[x][y] > 1 {
-				count++
-			}
 		}
 	}
 	return count
