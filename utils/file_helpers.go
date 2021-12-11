@@ -17,6 +17,32 @@ func CheckErr(name string, err error) {
 	}
 }
 
+// ReadFileToByteSlice - read file into a single long byte slice for whole file
+func ReadFileToByteSlice(filename string) (bytes []byte) {
+	bytes, _ = os.ReadFile(filename)
+	return
+}
+
+// ReadFileToString - read file into a single long byte slice for whole file
+func ReadFileToString(filename string) string {
+	str, _ := os.ReadFile(filename)
+	return string(str)
+}
+
+// ReadFileToStringSlice - read file with os.ReadFile then create slice
+func ReadFileToStringSlice(filename string) (stringSlice []string) {
+	str := ReadFileToString(filename)
+	return strings.Split(str, "\n")
+}
+
+// readFileToByteSliceSlice - read file with os.ReadFile then create slice
+func readFileToByteSliceSlice(filename string) (byteSlice [][]byte) {
+	theBytes := ReadFileToByteSlice(filename)
+	return bytes.Split(theBytes, []byte("\n"))
+}
+
+/////// less efficient below this line that alternatives above
+
 // ImportFileToIntSlice - read ints from file into slice
 func ImportFileToIntSlice(filename string) (numberSlice []int) {
 	f, err := os.Open(filename)
@@ -69,28 +95,4 @@ func ImportFileToStringMap(filename string) (stringMap map[int]string) {
 		i++
 	}
 	return
-}
-
-// ReadFileToByteSlice - read file into a single long byte slice for whole file
-func ReadFileToByteSlice(filename string) (bytes []byte) {
-	bytes, _ = os.ReadFile(filename)
-	return
-}
-
-// ReadFileToByteSliceSlice - read file with os.ReadFile then create slice
-func ReadFileToByteSliceSlice(filename string) (byteSlice [][]byte) {
-	theBytes := ReadFileToByteSlice(filename)
-	return bytes.Split(theBytes, []byte("\n"))
-}
-
-// ReadFileToString - read file into a single long byte slice for whole file
-func ReadFileToString(filename string) string {
-	str, _ := os.ReadFile(filename)
-	return string(str)
-}
-
-// ReadFileToStringSlice - read file with os.ReadFile then create slice
-func ReadFileToStringSlice(filename string) (stringSlice []string) {
-	str := ReadFileToString(filename)
-	return strings.Split(str, "\n")
 }
