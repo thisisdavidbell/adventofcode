@@ -48,6 +48,7 @@ func part2(nums []string, boards [][]map[string]struct{}) int {
 	winningBoards := make(map[int]struct{})
 	for _, n := range nums {
 		for boardKey := 0; boardKey < len(boards); boardKey++ {
+			//	if _, ok := winningBoards[boardKey]; !ok {
 			if checkBoardWins(n, boards[boardKey]) {
 				winningBoards[boardKey] = struct{}{}
 				if len(winningBoards) == len(boards) {
@@ -57,6 +58,7 @@ func part2(nums []string, boards [][]map[string]struct{}) int {
 				//boards = removeBoard(boards, boardKey)
 				//boardKey--
 			}
+			//	}
 		}
 	}
 	return 0

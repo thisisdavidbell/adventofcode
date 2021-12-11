@@ -17,6 +17,12 @@ go pprof link: https://pkg.go.dev/runtime/pprof#hdr-Profiling_a_Go_program
   - `list part2`
 
 
+Perf observations:
+- sheer number of permutations meant reducing number of scans of each card valuable - huge win to only check each number once
+- removal of winning board did not save time:
+  - deleting board from slice - slice processing more expensive than time saved
+  - skipping boards that have already won - slightly worse - cost of operation to check board each time more than saving it seems.
+
 Benchmark results:
 
 ```
@@ -29,8 +35,6 @@ BenchmarkAllPart2-16                  	     163	   7116813 ns/op  <- profiling b
 BenchmarkPart2-16                     	    2613	    448427 ns/op  <- removing matches numbers from map, so scanning remaining board for latest number only
 
 BenchmarkPart2-16                     	    1755	    630866 ns/op <= deleting board when it wins <- overhead of slice manipulation clearly way more than gain
-
-
 ```
 
 Profile:
