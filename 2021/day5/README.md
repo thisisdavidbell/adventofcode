@@ -23,8 +23,8 @@ go pprof link: https://pkg.go.dev/runtime/pprof#hdr-Profiling_a_Go_program
 
 ### Benchmark results:
 ```
-BenchmarkPart2All-16    	     318	   3491361 ns/op
-BenchmarkPart2-16       	     507	   2186348 ns/op
+BenchmarkPart2All-16    	     318	   3,491,361 ns/op
+BenchmarkPart2-16       	     507	   2,186,348 ns/op
 ```
 
 ### Profile Data
@@ -57,6 +57,11 @@ readInputs line:
   - creating grid
   - applying lines
 
+Possible improvements:
+- 1d slice more efficient than 2d slice (only one creation step...)
+  - so convert the 2 numbers into a unique single number, e.g. (x *1000) + y
+- a map would allow you to only store use the points of interest, but alloc so expensive
+
 # First Analysis
 Orig 1st pass benchmark, including looking up result across whole grid:
 
@@ -65,7 +70,6 @@ Orig 1st pass benchmark, including looking up result across whole grid:
 ```
 BenchmarkPart2All-16    	     240	   5049924 ns/op
 BenchmarkPart2-16       	     298	   4212361 ns/op
-
 ```
 
 ### Profile Data:
