@@ -12,8 +12,8 @@ func BenchmarkPart2All(b *testing.B) {
 }
 
 func BenchmarkPart2(b *testing.B) {
-	lines, maxX, maxY := readInputs("real-input.txt")
+	lines := readInputs("real-input.txt")
 	for i := 0; i < b.N; i++ {
-		part2(lines, maxX, maxY)
+		part2(lines, 989, 988)
 	}
 }

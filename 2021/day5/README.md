@@ -23,11 +23,41 @@ go pprof link: https://pkg.go.dev/runtime/pprof#hdr-Profiling_a_Go_program
 
 ### Benchmark results:
 ```
-BenchmarkPart2All-16    	     318	   3,491,361 ns/op
-BenchmarkPart2-16       	     507	   2,186,348 ns/op
+BenchmarkPart2All-16    	     480	   2,218,951 ns/op <- new 1D slice but more maths
+BenchmarkPart2-16       	     914	   1,227,537 ns/op <- new 1D slice but more maths
+
+BenchmarkPart2All-16    	     318	   3,491,361 ns/op <- old 2D slice
+BenchmarkPart2-16       	     507	   2,186,348 ns/op <- old 2D slice
 ```
 
-### Profile Data
+### Profile Data 1D slice
+top:
+```
+660ms 21.43% 21.43%      660ms 21.43%  runtime.kevent
+510ms 16.56% 37.99%      610ms 19.81%  github.com/thisisdavidbell/adventofcode/2021/day5.applyCoords
+410ms 13.31% 51.30%      410ms 13.31%  syscall.syscall
+```
+
+list part2:
+```
+.          .     33:func part2(lines []line, maxX int, maxY int) int {
+.          .     34:	count := 0
+.      470ms     35:	grid := createGrid(maxX, maxY)
+.          .     36:	for _, aLine := range lines {
+.      610ms     37:		count = applyCoords(aLine, grid, count)
+.          .     38:	}
+.          .     39:	return count //countNumIntersects(grid
+```
+
+readInputs line:
+```
+         .      660ms     29:	lines := readInputs(filename)
+```
+
+### Perf Thoughts:
+- createGrid now a smaller proportion (so quicker) - removed 988 allocs.
+
+### Profile Data 2D slice
 top:
 ```
 820ms 21.69% 21.69%      820ms 21.69%  runtime.kevent
