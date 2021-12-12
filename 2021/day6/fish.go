@@ -13,52 +13,43 @@ var newFishDays = 8
 
 func main() {
 
-	fmt.Printf("Test Part 1: %v\n", part1All("test-input.txt", 80))
-	fmt.Printf("Test Part 2: %v\n", part1All("test-input.txt", 256))
+	fmt.Printf("Test Part 1: %v\n", solveAll("test-input.txt", 80))
+	fmt.Printf("Test Part 2: %v\n", solveAll("test-input.txt", 256))
 
-	fmt.Printf("Real Part 1: %v\n", part1All("real-input.txt", 80))
-	fmt.Printf("Real Part 2: %v\n", part1All("real-input.txt", 256))
+	fmt.Printf("Real Part 1: %v\n", solveAll("real-input.txt", 80))
+	fmt.Printf("Real Part 2: %v\n", solveAll("real-input.txt", 256))
 }
 
-// ReadFileOfCommaSeperatedIntsToSlice - read ints from single line of file
-func readFileOfCommaSeperatedIntsToSlice(filename string) (theInts []int) {
-	//sliceSize := 26984457539
-	sliceSize := 99999999999
-
+func readInput(filename string) (theCount []int) {
 	str := utils.ReadFileToString(filename)
 	theStrings := strings.Split(str, ",")
-	//	theInts = make([]int, 0, len(theStrings))
-	theInts = make([]int, 0, sliceSize)
+	theCount = make([]int, 9, 9)
 	for _, theString := range theStrings {
-		theInt, _ := strconv.Atoi(theString)
-		theInts = append(theInts, theInt)
+		fishDay, _ := strconv.Atoi(theString)
+		theCount[fishDay]++
 	}
 	return
 }
 
-func part1All(filename string, numDays int) int {
-	theFish := readFileOfCommaSeperatedIntsToSlice(filename) //drb: ensure we do correct thing on day 0 and day 80
-	return part1(theFish, numDays)
+func solveAll(filename string, numDays int) int {
+	theCount := readInput(filename)
+	return solve(theCount, numDays)
 }
 
-//drb: for now accept we dont know how many fish, so cant pre-alloc whole slice...
-func part1(theFish []int, numDays int) (count int) {
-	//	fmt.Printf("intFish: %v\n", initFish)
+func solve(theCount []int, numDays int) (count int) {
 
 	for d := 0; d < numDays; d++ {
-		numFishAtStartOfDay := len(theFish)
-		for i := 0; i < numFishAtStartOfDay; i++ {
-			switch theFish[i] {
-			case 0:
-				theFish[i] = oldFishDays
-				theFish = append(theFish, newFishDays)
-			default:
-				theFish[i]--
-			}
+		day0 := theCount[0]
+		for i := 1; i < 9; i++ {
+			theCount[i-1] = theCount[i]
 		}
-
+		theCount[6] = theCount[6] + day0
+		theCount[8] = day0
 	}
-	return len(theFish)
+	for c := 0; c < 9; c++ {
+		count = count + theCount[c]
+	}
+	return
 }
 
 /*

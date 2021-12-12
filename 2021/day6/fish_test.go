@@ -4,9 +4,15 @@ import (
 	"testing"
 )
 
-func BenchmarkPart2Only(b *testing.B) {
-	// input
+func BenchmarkSolveAll(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		part2(realSlice)
+		solveAll("real-input.txt", 256)
+	}
+}
+
+func BenchmarkSolve(b *testing.B) {
+	theCount := readInput("real-input,txt")
+	for i := 0; i < b.N; i++ {
+		solve(theCount, 265)
 	}
 }
