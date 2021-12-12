@@ -35,6 +35,18 @@ func ReadFileToStringSlice(filename string) (stringSlice []string) {
 	return strings.Split(str, "\n")
 }
 
+// ReadFileOfCommaSeperatedIntsToSlice - read ints from single line of file
+func ReadFileOfCommaSeperatedIntsToSlice(filename string) (theInts []int) {
+	str := ReadFileToString(filename)
+	theStrings := strings.Split(str, ",")
+	theInts = make([]int, 0, len(theStrings))
+	for _, theString := range theStrings {
+		theInt, _ := strconv.Atoi(theString)
+		theInts = append(theInts, theInt)
+	}
+	return
+}
+
 // readFileToByteSliceSlice - read file with os.ReadFile then create slice
 func readFileToByteSliceSlice(filename string) (byteSlice [][]byte) {
 	theBytes := ReadFileToByteSlice(filename)
