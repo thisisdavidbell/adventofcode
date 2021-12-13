@@ -47,8 +47,25 @@ func ReadFileOfCommaSeperatedIntsToSlice(filename string) (theInts []int) {
 	return
 }
 
+func ReadFileOfCommaSeperatedIntsToSliceWithMinMax(filename string) (theInts []int, min int, max int) {
+	str := ReadFileToString(filename)
+	theStrings := strings.Split(str, ",")
+	theInts = make([]int, 0, len(theStrings))
+	for i, theString := range theStrings {
+		theInt, _ := strconv.Atoi(theString)
+		theInts = append(theInts, theInt)
+		if i == 0 || theInt < min {
+			min = theInt
+		}
+		if i == 0 || theInt > max {
+			max = theInt
+		}
+	}
+	return
+}
+
 // readFileToByteSliceSlice - read file with os.ReadFile then create slice
-func readFileToByteSliceSlice(filename string) (byteSlice [][]byte) {
+func ReadFileToByteSliceSlice(filename string) (byteSlice [][]byte) {
 	theBytes := ReadFileToByteSlice(filename)
 	return bytes.Split(theBytes, []byte("\n"))
 }

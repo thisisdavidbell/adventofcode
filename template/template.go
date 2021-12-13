@@ -5,24 +5,34 @@ package main
 //)
 
 func main() {
-	// testSlice := utils.ImportFileToIntSlice("test-input.txt")
-	//	realSlice := utils.ImportFileToIntSlice("real-input.txt")
+	//	fmt.Printf("Test Part 1: %v\n", part1All("test-input.txt"))
+	//	fmt.Printf("Test Part 2: %v\n\n", part2("test-input.txt"))
 
-	//	fmt.Printf("Test Part 1: %v\n", part1(testSlice))
-	//	fmt.Printf("Test Part 2: %v\n\n", part2(testSlice))
-
-	//	fmt.Printf("Real Part 1: %v\n", part1(realSlice))
-	//	fmt.Printf("Real Part 2: %v\n", part2(realslice))
+	//	fmt.Printf("Real Part 1: %v\n", part1("test-input.txt"))
+	//	fmt.Printf("Real Part 2: %v\n", part2("test-input.txt"))
 }
 
 /*
-func part1() () {
+func part1All() () {
 
 }
 */
 
 /*
+func part1() () {
+
+}
+
+/*
 func part2() () {
+
+	return
+}
+*/
+
+*/
+/*
+func part2All() () {
 
 	return
 }
