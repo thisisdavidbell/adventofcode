@@ -1,0 +1,4 @@
+cpu.prof
+mem.prof
+*.test
+output.txt

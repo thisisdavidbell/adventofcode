@@ -8,9 +8,6 @@ import (
 	"github.com/thisisdavidbell/adventofcode/utils"
 )
 
-var oldFishDays = 6
-var newFishDays = 8
-
 func main() {
 
 	fmt.Printf("Test Part 1: %v\n", solveAll("test-input.txt", 80))
@@ -23,7 +20,7 @@ func main() {
 func readInput(filename string) (theCount []int) {
 	str := utils.ReadFileToString(filename)
 	theStrings := strings.Split(str, ",")
-	theCount = make([]int, 9, 9)
+	theCount = make([]int, 9)
 	for _, theString := range theStrings {
 		fishDay, _ := strconv.Atoi(theString)
 		theCount[fishDay]++
@@ -51,10 +48,3 @@ func solve(theCount []int, numDays int) (count int) {
 	}
 	return
 }
-
-/*
-func part2() () {
-
-	return
-}
-*/
