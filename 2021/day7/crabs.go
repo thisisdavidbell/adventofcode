@@ -54,7 +54,7 @@ func part2(crabs []int, min int, max int) (bestSoFar int) {
 			numMoves := utils.IntAbs(pos - crab)
 			fuelUsed += nthTriangularNumber(numMoves)
 			if fuelUsed > bestSoFar && pos != min {
-				continue
+				break
 			}
 		}
 		if pos == min || fuelUsed < bestSoFar {

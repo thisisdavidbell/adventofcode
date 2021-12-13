@@ -23,13 +23,22 @@ go pprof link: https://pkg.go.dev/runtime/pprof#hdr-Profiling_a_Go_program
 
 ### Benchmark results:
 ```
+BenchmarkPart2All-16                 854           1,293,135 ns/op
+BenchmarkPart2-16                    940           1,231,495 ns/op
+```
+
+Results without trimming when result exceeds best so far:
+```
 BenchmarkPart2All-16                 472           2,421,530 ns/op
 BenchmarkPart2-16                    510           2,315,802 ns/op
 ```
 
 ### Perf Thoughts
 - was never going to perform loop
-- found maths function for nth triangular number
+  - found maths function for nth triangular number
+- turns out that average is indeed the best approach (but not coded up)
+  - part1 median
+  - part2 mean
 
 ```
 
