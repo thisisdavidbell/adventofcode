@@ -42,19 +42,13 @@ func part1(crabs []int, min int, max int) (bestSoFar int) {
 	return
 }
 
-// part 2 - dont want to actually count - must have a mathematical formula...
-// - its the nth triangular number...
-//  - formula: n(n+1)/2
-//test: 5->2 = 3 = 1+2+3 = 6
-//test: 5->2 = 3 = (3 * 4) / 2 11 * 12
-
 func part2All(filename string) int {
 	input, min, max := utils.ReadFileOfCommaSeperatedIntsToSliceWithMinMax(filename)
 	return part2(input, min, max)
 }
 func part2(crabs []int, min int, max int) (bestSoFar int) {
 
-	for pos := min; pos < max+1; pos++ {
+	for pos := min; pos <= max; pos++ {
 		fuelUsed := 0
 		for _, crab := range crabs {
 			numMoves := utils.IntAbs(pos - crab)

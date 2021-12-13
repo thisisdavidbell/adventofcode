@@ -23,8 +23,8 @@ go pprof link: https://pkg.go.dev/runtime/pprof#hdr-Profiling_a_Go_program
 
 ### Benchmark results:
 ```
-BenchmarkPart2All-16                 472           2421530 ns/op
-BenchmarkPart2-16                    510           2315802 ns/op
+BenchmarkPart2All-16                 472           2,421,530 ns/op
+BenchmarkPart2-16                    510           2,315,802 ns/op
 ```
 
 ### Perf Thoughts
@@ -37,7 +37,7 @@ BenchmarkPart2-16                    510           2315802 ns/op
 ```
          .          .     55:func part2(crabs []int, min int, max int) (bestSoFar int) {
          .          .     56:
-         .       20ms     57:   for pos := min; pos < max+1; pos++ {
+         .       20ms     57:   for pos := min; pos <= max; pos++ {
          .          .     58:           fuelUsed := 0
      440ms      440ms     59:           for _, crab := range crabs {
      380ms      610ms     60:                   numMoves := utils.IntAbs(pos - crab)
