@@ -22,3 +22,8 @@ go pprof link: https://pkg.go.dev/runtime/pprof#hdr-Profiling_a_Go_program
 # Latest Analysis
 
 ### Benchmark results:
+Quick and very dirty results - using strings, and finding all segments
+```
+BenchmarkPart2All-16                 834           1,330,706 ns/op
+BenchmarkPart2-16                   1171            957,445 ns/op
+```

@@ -1,21 +1,18 @@
 package main
 
-/*
 import (
 	"testing"
 )
 
 func BenchmarkPart2All(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		part2("real-input.txt")
+		part2All("real-input.txt")
 	}
 }
 
-
-func BenchmarkSolve(b *testing.B) {
-	theCount := readInput("real-input.txt")
+func BenchmarkPart2(b *testing.B) {
+	displays := readInputPart2("real-input.txt")
 	for i := 0; i < b.N; i++ {
-		solve(theCount, 265)
+		part2(displays)
 	}
 }
-*/
