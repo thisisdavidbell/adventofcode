@@ -11,7 +11,7 @@ func BenchmarkPart2All(b *testing.B) {
 }
 
 func BenchmarkPart2(b *testing.B) {
-	displays := readInputPart2("real-input.txt")
+	displays := readInput("real-input.txt")
 	for i := 0; i < b.N; i++ {
 		part2(displays)
 	}
