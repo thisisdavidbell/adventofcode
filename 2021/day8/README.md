@@ -21,6 +21,90 @@ go pprof link: https://pkg.go.dev/runtime/pprof#hdr-Profiling_a_Go_program
 
 # Latest Analysis
 
+Move all strings to []bytes:
+### Benchmark results:
+```
+BenchmarkPart2All-16                        1360            852809 ns/op
+BenchmarkPart2-16                           1928            553152 ns/op
+```
+
+### Profiling
+```
+      20ms      1.37s (flat, cum)  5.43% of Total
+         .          .     70:   return
+         .          .     71:}
+         .          .     72:
+         .          .     73:// todo: update to remove string cassts - use byte everywhere we can... and move strings.* to bytes.*
+         .          .     74:func part2(displays []display) (count int) {
+         .       20ms     75:   for _, d := range displays {
+         .      100ms     76:           correctDigitLetters := make(map[int][]byte, 10)
+         .          .     77:           //find top:
+         .       50ms     78:           top := removeChars(d.lenThree, (d.lenTwo))
+         .      110ms     79:           applyLettersByteSlice(correctDigitLetters, top[0], []int{0, 2, 3, 5, 6, 7, 8, 9})
+         .          .     80:
+         .       40ms     81:           otherCharsinFour := removeChars(d.lenFour, d.lenTwo)
+         .          .     82:
+         .          .     83:           // find three
+         .          .     84:           var three []byte
+         .          .     85:           for _, f := range d.lenFive {
+         .          .     86:                   if bytes.Contains(f, []byte{d.lenTwo[0]}) && bytes.Contains(f, []byte{d.lenTwo[1]}) {
+         .          .     87:                           three = f
+         .          .     88:                           break
+         .          .     89:                   }
+         .          .     90:           }
+         .          .     91:           // find middle
+         .          .     92:           var middle []byte
+         .       10ms     93:           if bytes.Contains(three, []byte{otherCharsinFour[0]}) {
+         .          .     94:                   middle = []byte{otherCharsinFour[0]}
+         .          .     95:           } else {
+         .          .     96:                   middle = []byte{otherCharsinFour[1]}
+         .          .     97:           }
+         .      110ms     98:           applyLettersByteSlice(correctDigitLetters, middle[0], []int{2, 3, 4, 5, 6, 8, 9})
+         .          .     99:
+         .          .    100:           // top-left must be remaining char in 4:
+         .       10ms    101:           topleft := removeChars(otherCharsinFour, middle)
+         .       20ms    102:           applyLettersByteSlice(correctDigitLetters, topleft[0], []int{0, 4, 5, 6, 8, 9})
+         .          .    103:
+         .          .    104:           // find char left after removing 7 and middle from three, must be bottom.
+      10ms      100ms    105:           bottom := removeChars(three, d.lenThree)
+         .       10ms    106:           bottom = removeChars(bottom, middle)
+         .          .    107:
+         .       30ms    108:           applyLettersByteSlice(correctDigitLetters, bottom[0], []int{0, 2, 3, 5, 6, 8, 9})
+         .          .    109:
+         .          .    110:           // bottom left must be 8 less 3, less topleft
+         .       30ms    111:           bottomleft := removeChars(d.lenSeven, three)
+         .       20ms    112:           bottomleft = removeChars(bottomleft, topleft)
+         .       10ms    113:           applyLettersByteSlice(correctDigitLetters, bottomleft[0], []int{0, 2, 6, 8})
+         .          .    114:
+         .          .    115:           //find top right and bottom right -only 1 of sixes is missing eitehr segment of 1, so find which it is, and thats top right
+         .          .    116:           var topright []byte
+      10ms       10ms    117:           for _, f := range d.lenSix {
+         .       10ms    118:                   if !(bytes.Contains(f, []byte{d.lenTwo[0]}) && bytes.Contains(f, []byte{d.lenTwo[1]})) {
+         .          .    119:                           if bytes.Contains(f, []byte{d.lenTwo[0]}) {
+         .          .    120:                                   topright = []byte{d.lenTwo[1]}
+         .          .    121:                           } else {
+         .          .    122:                                   topright = []byte{d.lenTwo[0]}
+         .          .    123:                           }
+         .          .    124:                           break
+         .          .    125:                   }
+         .          .    126:           }
+         .      100ms    127:           applyLettersByteSlice(correctDigitLetters, topright[0], []int{0, 1, 2, 3, 4, 7, 8, 9})
+         .          .    128:
+         .          .    129:           //bottom right remaining segment of 1
+         .       40ms    130:           bottomright := removeChars(d.lenTwo, topright)
+         .      140ms    131:           applyLettersByteSlice(correctDigitLetters, bottomright[0], []int{0, 1, 3, 4, 5, 6, 7, 8, 9})
+         .          .    132:
+         .          .    133:           // now match the examples
+         .      400ms    134:           count += findActualDigits(correctDigitLetters, d.example)
+         .          .    135:   }
+         .          .    136:
+         .          .    137:   return
+         .          .    138:}
+```
+
+
+# Older analysis:
+
 Removed string concat for decent gain, after proving it was as bad as I suspected.
 (Acknowledged that more gain to be had by pushing whole letters to correctDigitLetters, but little to learn there.)
 
@@ -32,8 +116,6 @@ BenchmarkApplyLettersString-16            125299              78459 ns/op
 BenchmarkApplyLettersByteSlice-16        8846604               131.0 ns/op
 BenchmarkApplyLettersByteRune-16         7789998               179.0 ns/op
 ```
-
-# Older analysis:
 
 ### Older Benchmarks
 Only minor improvements from tweaks:
