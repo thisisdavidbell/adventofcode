@@ -30,7 +30,6 @@ func part2() () {
 }
 */
 
-*/
 /*
 func part2All() () {
 

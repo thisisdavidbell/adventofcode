@@ -44,17 +44,17 @@ func readInput(filename string) (displays []display) {
 		for _, digit := range strings.Fields(parts[0]) {
 			switch len(digit) {
 			case 2:
-				d.lenTwo = append(d.lenTwo, digit)
+				d.lenTwo = digit
 			case 3:
-				d.lenThree = append(d.lenThree, digit)
+				d.lenThree = digit
 			case 4:
-				d.lenFour = append(d.lenFour, digit)
+				d.lenFour = digit
 			case 5:
 				d.lenFive = append(d.lenFive, digit)
 			case 6:
 				d.lenSix = append(d.lenSix, digit)
 			case 7:
-				d.lenSeven = append(d.lenSeven, digit)
+				d.lenSeven = digit
 			}
 		}
 		//d := display{digits: digitsMap, example: strings.Fields(parts[1])}
@@ -69,19 +69,20 @@ func part2All(filename string) (count int) {
 	return
 }
 
+// todo: update to remove string cassts - use byte everywhere we can...
 func part2(displays []display) (count int) {
 	for _, d := range displays {
-		correctDigitLetters := make(map[int]string, 10)
+		correctDigitLetters := make(map[int][]byte, 10)
 		//find top:
-		top := removeChars(d.lenThree[0], (d.lenTwo[0]))
-		applyLetters(correctDigitLetters, top, []int{0, 2, 3, 5, 6, 7, 8, 9})
+		top := removeChars(d.lenThree, (d.lenTwo))
+		applyLettersByteSlice(correctDigitLetters, top[0], []int{0, 2, 3, 5, 6, 7, 8, 9})
 
-		otherCharsinFour := removeChars(d.lenFour[0], d.lenTwo[0])
+		otherCharsinFour := removeChars(d.lenFour, d.lenTwo)
 
 		// find three
 		three := ""
 		for _, f := range d.lenFive {
-			if strings.Contains(f, string(d.lenTwo[0][0])) && strings.Contains(f, string(d.lenTwo[0][1])) {
+			if strings.Contains(f, string(d.lenTwo[0])) && strings.Contains(f, string(d.lenTwo[1])) {
 				three = f
 				break
 			}
@@ -93,40 +94,40 @@ func part2(displays []display) (count int) {
 		} else {
 			middle = string(otherCharsinFour[1])
 		}
-		applyLetters(correctDigitLetters, middle, []int{2, 3, 4, 5, 6, 8, 9})
+		applyLettersByteSlice(correctDigitLetters, middle[0], []int{2, 3, 4, 5, 6, 8, 9})
 
 		// top-left must be remaining char in 4:
-		topleft := removeChars(otherCharsinFour, middle)
-		applyLetters(correctDigitLetters, topleft, []int{0, 4, 5, 6, 8, 9})
+		topleft := removeChars(otherCharsinFour, string(middle))
+		applyLettersByteSlice(correctDigitLetters, topleft[0], []int{0, 4, 5, 6, 8, 9})
 
 		// find char left after removing 7 and middle from three, must be bottom.
-		bottom := removeChars(three, d.lenThree[0])
-		bottom = removeChars(bottom, middle)
+		bottom := removeChars(three, d.lenThree)
+		bottom = removeChars(bottom, string(middle))
 
-		applyLetters(correctDigitLetters, bottom, []int{0, 2, 3, 5, 6, 8, 9})
+		applyLettersByteSlice(correctDigitLetters, bottom[0], []int{0, 2, 3, 5, 6, 8, 9})
 
 		// bottom left must be 8 less 3, less topleft
-		bottomleft := removeChars(d.lenSeven[0], three)
+		bottomleft := removeChars(d.lenSeven, three)
 		bottomleft = removeChars(bottomleft, topleft)
-		applyLetters(correctDigitLetters, bottomleft, []int{0, 2, 6, 8})
+		applyLettersByteSlice(correctDigitLetters, bottomleft[0], []int{0, 2, 6, 8})
 
 		//find top right and bottom right -only 1 of sixes is missing eitehr segment of 1, so find which it is, and thats top right
 		topright := ""
 		for _, f := range d.lenSix {
-			if !(strings.Contains(f, string(d.lenTwo[0][0])) && strings.Contains(f, string(d.lenTwo[0][1]))) {
-				if strings.Contains(f, string(d.lenTwo[0][0])) {
-					topright = string(d.lenTwo[0][1])
+			if !(strings.Contains(f, string(d.lenTwo[0])) && strings.Contains(f, string(d.lenTwo[1]))) {
+				if strings.Contains(f, string(d.lenTwo[0])) {
+					topright = string(d.lenTwo[1])
 				} else {
-					topright = string(d.lenTwo[0][0])
+					topright = string(d.lenTwo[0])
 				}
 				break
 			}
 		}
-		applyLetters(correctDigitLetters, topright, []int{0, 1, 2, 3, 4, 7, 8, 9})
+		applyLettersByteSlice(correctDigitLetters, topright[0], []int{0, 1, 2, 3, 4, 7, 8, 9})
 
 		//bottom right remaining segment of 1
-		bottomright := removeChars(d.lenTwo[0], topright)
-		applyLetters(correctDigitLetters, bottomright, []int{0, 1, 3, 4, 5, 6, 7, 8, 9})
+		bottomright := removeChars(d.lenTwo, topright)
+		applyLettersByteSlice(correctDigitLetters, bottomright[0], []int{0, 1, 3, 4, 5, 6, 7, 8, 9})
 
 		// now match the examples
 		count += findActualDigits(correctDigitLetters, d.example)
@@ -135,7 +136,7 @@ func part2(displays []display) (count int) {
 	return
 }
 
-func findActualDigits(correctDigitLetters map[int]string, examples []string) (value int) {
+func findActualDigits(correctDigitLetters map[int][]byte, examples []string) (value int) {
 	actualDigits := make([]int, 0, 4)
 	for _, ex := range examples {
 		matchedInt := 0
@@ -143,7 +144,7 @@ func findActualDigits(correctDigitLetters map[int]string, examples []string) (va
 			if len(ex) == len(s) {
 				match := true
 				for _, c := range ex {
-					if !strings.Contains(s, string(c)) {
+					if !strings.Contains(string(s), string(c)) {
 						match = false
 						break
 					}
@@ -162,8 +163,27 @@ func findActualDigits(correctDigitLetters map[int]string, examples []string) (va
 
 func applyLetters(correctDigitLetters map[int]string, ch string, segments []int) {
 	for _, s := range segments {
+		//correctDigitLetters[s] = correctDigitLetters[s] + ch
+		correctDigitLetters[s] = strings.Join([]string{correctDigitLetters[s], ch}, "")
+	}
+}
+
+func applyLettersString(correctDigitLetters map[int]string, ch string, segments []int) {
+	for _, s := range segments {
 		correctDigitLetters[s] = correctDigitLetters[s] + ch
 		//correctDigitLetters[s] = strings.Join([]string{correctDigitLetters[s], ch}, "")
+	}
+}
+
+func applyLettersByteSlice(correctDigitLetters map[int][]byte, ch byte, segments []int) {
+	for _, s := range segments {
+		correctDigitLetters[s] = append(correctDigitLetters[s], ch)
+	}
+}
+
+func applyLettersRuneSlice(correctDigitLetters map[int][]rune, ch rune, segments []int) {
+	for _, s := range segments {
+		correctDigitLetters[s] = append(correctDigitLetters[s], ch)
 	}
 }
 
@@ -178,12 +198,12 @@ func removeChars(s string, remove string) (changed string) {
 }
 
 type display struct {
-	lenTwo   []string
-	lenThree []string
-	lenFour  []string
+	lenTwo   string
+	lenThree string
+	lenFour  string
 	lenFive  []string
 	lenSix   []string
-	lenSeven []string
+	lenSeven string
 
 	example []string
 }
