@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"strings"
 
 	"github.com/thisisdavidbell/adventofcode/utils"
 )
@@ -17,12 +16,13 @@ func main() {
 }
 
 func part1All(filename string) (count int) {
-	displays := readInput(filename)
-	count = part1(displays)
+	line := readInput(filename)
+	count = part1(line)
 	return
 }
 
-func part1(displays []display) (count int) {
+func part1(line []byte) (count int) {
+	displays := processInput(line)
 	for _, d := range displays {
 		for _, digit := range d.example {
 			switch len(digit) {
@@ -34,8 +34,13 @@ func part1(displays []display) (count int) {
 	return
 }
 
-func readInput(filename string) (displays []display) {
-	lines := utils.ReadFileToByteSliceSlice(filename)
+func readInput(filename string) (line []byte) {
+	line = utils.ReadFileToByteSlice(filename)
+	return
+}
+
+func processInput(line []byte) (displays []display) {
+	lines := bytes.Split(line, []byte("\n"))
 	displays = make([]display, 0, len(lines))
 	for _, line := range lines {
 		parts := bytes.Split(line, []byte{'|'})
@@ -65,18 +70,19 @@ func readInput(filename string) (displays []display) {
 }
 
 func part2All(filename string) (count int) {
-	displays := readInput(filename)
-	count = part2(displays)
+	line := readInput(filename)
+	count = part2(line)
 	return
 }
 
 // todo: update to remove string cassts - use byte everywhere we can... and move strings.* to bytes.*
-func part2(displays []display) (count int) {
+func part2(line []byte) (count int) {
+	displays := processInput(line)
 	for _, d := range displays {
 		correctDigitLetters := make(map[int][]byte, 10)
 		//find top:
 		top := removeChars(d.lenThree, (d.lenTwo))
-		applyLettersByteSlice(correctDigitLetters, top[0], []int{0, 2, 3, 5, 6, 7, 8, 9})
+		applyLetters(correctDigitLetters, top[0], []int{0, 2, 3, 5, 6, 7, 8, 9})
 
 		otherCharsinFour := removeChars(d.lenFour, d.lenTwo)
 
@@ -95,22 +101,22 @@ func part2(displays []display) (count int) {
 		} else {
 			middle = []byte{otherCharsinFour[1]}
 		}
-		applyLettersByteSlice(correctDigitLetters, middle[0], []int{2, 3, 4, 5, 6, 8, 9})
+		applyLetters(correctDigitLetters, middle[0], []int{2, 3, 4, 5, 6, 8, 9})
 
 		// top-left must be remaining char in 4:
 		topleft := removeChars(otherCharsinFour, middle)
-		applyLettersByteSlice(correctDigitLetters, topleft[0], []int{0, 4, 5, 6, 8, 9})
+		applyLetters(correctDigitLetters, topleft[0], []int{0, 4, 5, 6, 8, 9})
 
 		// find char left after removing 7 and middle from three, must be bottom.
 		bottom := removeChars(three, d.lenThree)
 		bottom = removeChars(bottom, middle)
 
-		applyLettersByteSlice(correctDigitLetters, bottom[0], []int{0, 2, 3, 5, 6, 8, 9})
+		applyLetters(correctDigitLetters, bottom[0], []int{0, 2, 3, 5, 6, 8, 9})
 
 		// bottom left must be 8 less 3, less topleft
 		bottomleft := removeChars(d.lenSeven, three)
 		bottomleft = removeChars(bottomleft, topleft)
-		applyLettersByteSlice(correctDigitLetters, bottomleft[0], []int{0, 2, 6, 8})
+		applyLetters(correctDigitLetters, bottomleft[0], []int{0, 2, 6, 8})
 
 		//find top right and bottom right -only 1 of sixes is missing eitehr segment of 1, so find which it is, and thats top right
 		var topright []byte
@@ -124,11 +130,11 @@ func part2(displays []display) (count int) {
 				break
 			}
 		}
-		applyLettersByteSlice(correctDigitLetters, topright[0], []int{0, 1, 2, 3, 4, 7, 8, 9})
+		applyLetters(correctDigitLetters, topright[0], []int{0, 1, 2, 3, 4, 7, 8, 9})
 
 		//bottom right remaining segment of 1
 		bottomright := removeChars(d.lenTwo, topright)
-		applyLettersByteSlice(correctDigitLetters, bottomright[0], []int{0, 1, 3, 4, 5, 6, 7, 8, 9})
+		applyLetters(correctDigitLetters, bottomright[0], []int{0, 1, 3, 4, 5, 6, 7, 8, 9})
 
 		// now match the examples
 		count += findActualDigits(correctDigitLetters, d.example)
@@ -141,11 +147,34 @@ func findActualDigits(correctDigitLetters map[int][]byte, examples [][]byte) (va
 	actualDigits := make([]int, 0, 4)
 	for _, ex := range examples {
 		matchedInt := 0
-		for k, s := range correctDigitLetters {
-			if len(ex) == len(s) {
+		switch len(ex) {
+		case 2:
+			matchedInt = 1
+		case 3:
+			matchedInt = 7
+		case 4:
+			matchedInt = 4
+		case 7:
+			matchedInt = 8
+		case 5:
+			for _, k := range []int{2, 3, 5} {
 				match := true
 				for _, c := range ex {
-					if !strings.Contains(string(s), string(c)) {
+					if !bytes.ContainsRune(correctDigitLetters[k], rune(c)) {
+						match = false
+						break
+					}
+				}
+				if match {
+					matchedInt = k
+					break
+				}
+			}
+		case 6:
+			for _, k := range []int{0, 6, 9} {
+				match := true
+				for _, c := range ex {
+					if !bytes.ContainsRune(correctDigitLetters[k], rune(c)) {
 						match = false
 						break
 					}
@@ -162,27 +191,7 @@ func findActualDigits(correctDigitLetters map[int][]byte, examples [][]byte) (va
 	return
 }
 
-func applyLetters(correctDigitLetters map[int]string, ch string, segments []int) {
-	for _, s := range segments {
-		//correctDigitLetters[s] = correctDigitLetters[s] + ch
-		correctDigitLetters[s] = strings.Join([]string{correctDigitLetters[s], ch}, "")
-	}
-}
-
-func applyLettersString(correctDigitLetters map[int]string, ch string, segments []int) {
-	for _, s := range segments {
-		correctDigitLetters[s] = correctDigitLetters[s] + ch
-		//correctDigitLetters[s] = strings.Join([]string{correctDigitLetters[s], ch}, "")
-	}
-}
-
-func applyLettersByteSlice(correctDigitLetters map[int][]byte, ch byte, segments []int) {
-	for _, s := range segments {
-		correctDigitLetters[s] = append(correctDigitLetters[s], ch)
-	}
-}
-
-func applyLettersRuneSlice(correctDigitLetters map[int][]rune, ch rune, segments []int) {
+func applyLetters(correctDigitLetters map[int][]byte, ch byte, segments []int) {
 	for _, s := range segments {
 		correctDigitLetters[s] = append(correctDigitLetters[s], ch)
 	}

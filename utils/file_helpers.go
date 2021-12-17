@@ -23,6 +23,12 @@ func ReadFileToByteSlice(filename string) (bytes []byte) {
 	return
 }
 
+// readFileToByteSliceSlice - read file with os.ReadFile then create slice
+func ReadFileToByteSliceSlice(filename string) (byteSlice [][]byte) {
+	theBytes := ReadFileToByteSlice(filename)
+	return bytes.Split(theBytes, []byte("\n"))
+}
+
 // ReadFileToString - read file into a single long byte slice for whole file
 func ReadFileToString(filename string) string {
 	str, _ := os.ReadFile(filename)
@@ -62,12 +68,6 @@ func ReadFileOfCommaSeperatedIntsToSliceWithMinMax(filename string) (theInts []i
 		}
 	}
 	return
-}
-
-// readFileToByteSliceSlice - read file with os.ReadFile then create slice
-func ReadFileToByteSliceSlice(filename string) (byteSlice [][]byte) {
-	theBytes := ReadFileToByteSlice(filename)
-	return bytes.Split(theBytes, []byte("\n"))
 }
 
 /////// less efficient below this line that alternatives above

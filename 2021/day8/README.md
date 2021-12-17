@@ -21,8 +21,24 @@ go pprof link: https://pkg.go.dev/runtime/pprof#hdr-Profiling_a_Go_program
 
 # Latest Analysis
 
-Move all strings to []bytes:
 ### Benchmark results:
+Updated structure to exclude reading file, but include processing single []byte
+```
+BenchmarkPart2All-16                1437            776589 ns/op
+BenchmarkPart2-16                   1561            690815 ns/op
+```
+
+# Older analysis:
+
+### Benchmark results:
+Solve len 2,3,4,7 instantly:
+```
+BenchmarkPart2All-16                        1406            793713 ns/op
+BenchmarkPart2-16                           2116            497063 ns/op
+```
+
+Move all strings to []bytes:
+
 ```
 BenchmarkPart2All-16                        1360            852809 ns/op
 BenchmarkPart2-16                           1928            553152 ns/op
@@ -101,9 +117,6 @@ BenchmarkPart2-16                           1928            553152 ns/op
          .          .    137:   return
          .          .    138:}
 ```
-
-
-# Older analysis:
 
 Removed string concat for decent gain, after proving it was as bad as I suspected.
 (Acknowledged that more gain to be had by pushing whole letters to correctDigitLetters, but little to learn there.)

@@ -17,7 +17,7 @@ func BenchmarkPart2(b *testing.B) {
 	}
 }
 
-func BenchmarkApplyLettersString(b *testing.B) {
+func SkipBenchmarkApplyLettersString(b *testing.B) {
 	correctDigitLetters := make(map[int]string, 10)
 	ch := "a"
 	segments := []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
@@ -26,7 +26,7 @@ func BenchmarkApplyLettersString(b *testing.B) {
 	}
 }
 
-func BenchmarkApplyLettersByteSlice(b *testing.B) {
+func SkipBenchmarkApplyLettersByteSlice(b *testing.B) {
 	correctDigitLetters := make(map[int][]byte, 10)
 	ch := byte('a')
 	segments := []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
@@ -35,7 +35,7 @@ func BenchmarkApplyLettersByteSlice(b *testing.B) {
 	}
 }
 
-func BenchmarkApplyLettersByteRune(b *testing.B) {
+func SkipBenchmarkApplyLettersByteRune(b *testing.B) {
 	correctDigitLetters := make(map[int][]rune, 10)
 	ch := 'a'
 	segments := []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
