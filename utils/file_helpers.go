@@ -24,6 +24,22 @@ func ReadFileToByteSlice(filename string) (bytes []byte) {
 }
 
 // readFileToByteSliceSlice - read file with os.ReadFile then create slice
+func ReadFileToUnits2DSlice(filename string) (units2DSlice [][]int) {
+	theBytes := ReadFileToByteSlice(filename)
+	lines := bytes.Split(theBytes, []byte("\n"))
+	width := len(lines[0])
+	units2DSlice = make([][]int, 0, len(lines))
+	for _, line := range lines {
+		unitsLine := make([]int, width)
+		for i, char := range line {
+			unitsLine[i], _ = strconv.Atoi(string(char))
+		}
+		units2DSlice = append(units2DSlice, unitsLine)
+	}
+	return units2DSlice
+}
+
+// readFileToByteSliceSlice - read file with os.ReadFile then create slice
 func ReadFileToByteSliceSlice(filename string) (byteSlice [][]byte) {
 	theBytes := ReadFileToByteSlice(filename)
 	return bytes.Split(theBytes, []byte("\n"))
@@ -70,7 +86,7 @@ func ReadFileOfCommaSeperatedIntsToSliceWithMinMax(filename string) (theInts []i
 	return
 }
 
-/////// less efficient below this line that alternatives above
+/////// less efficient below this line than alternatives above
 
 // ImportFileToIntSlice - read ints from file into slice
 func ImportFileToIntSlice(filename string) (numberSlice []int) {

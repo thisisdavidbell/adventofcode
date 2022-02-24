@@ -1,4 +1,4 @@
-module github.com/thisisdavidbell/adventofcode/2021/day8
+module github.com/thisisdavidbell/adventofcode
 
 go 1.16
 

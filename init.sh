@@ -4,7 +4,7 @@ if [ $# -ne 3 ]; then
     echo "Usage: init.sh YEAR DAY NAME"
     echo "  e.g. init.sh 2021 1 ocean"
     echo
-    return -1
+    return 1
 fi
 
 YEAR=$1
@@ -20,5 +20,7 @@ cd ${NEWDIR}
 
 mv template.go ${NAME}.go
 mv template_test.go ${NAME}_test.go
-go mod init
-go mod edit -replace github.com/thisisdavidbell/adventofcode/utils=../../utils
+
+# Visual Studio Code prefers a single go.mod at top of repo, so using that instead
+# go mod init
+# go mod edit -replace github.com/thisisdavidbell/adventofcode/utils=../../utils
