@@ -6,7 +6,7 @@ package main
 
 func main() {
 	//	fmt.Printf("Test Part 1: %v\n", part1All("test-input.txt"))
-	//	fmt.Printf("Real Part 1: %v\n\n", part1All("test-input.txt"))
+	//	fmt.Printf("Real Part 1: %v\n\n", part1All("real-input.txt"))
 
 	//	fmt.Printf("Test Part 2: %v\n", part2All("test-input.txt"))
 	//	fmt.Printf("Real Part 2: %v\n", part2All("test-input.txt"))

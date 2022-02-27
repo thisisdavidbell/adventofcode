@@ -23,6 +23,15 @@ func ReadFileToByteSlice(filename string) (bytes []byte) {
 	return
 }
 
+/*
+func ReadFileToLinesOfRunes(filename string) (runes [][]rune) {
+	lines  := ReadFileToByteSliceSlice(filename)
+
+
+	return runes
+}
+*/
+
 // readFileToByteSliceSlice - read file with os.ReadFile then create slice
 func ReadFileToUnits2DSlice(filename string) (units2DSlice [][]int) {
 	theBytes := ReadFileToByteSlice(filename)
