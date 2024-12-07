@@ -20,20 +20,6 @@ func part1All(filename string) (answer int) {
 */
 
 /*
-func part1(?) (answer int) {
-
-	return answer
-}
-*/
-
-/*
-func part2() () {
-
-	return
-}
-*/
-
-/*
 func part2All() () {
 
 	return

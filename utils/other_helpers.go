@@ -6,3 +6,10 @@ func IntAbs(x int) (abs int) {
 	}
 	return x
 }
+
+func IgnoreError(interf interface{}, err error) int {
+	if err != nil {
+		panic(err)
+	}
+	return interf.(int)
+}

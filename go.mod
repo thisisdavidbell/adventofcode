@@ -1,6 +1,6 @@
 module github.com/thisisdavidbell/adventofcode
 
-go 1.16
+go 1.23
 
 replace github.com/thisisdavidbell/adventofcode/utils => ./utils
 
