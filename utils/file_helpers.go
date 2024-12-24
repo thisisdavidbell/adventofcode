@@ -49,6 +49,22 @@ func ReadFileToUnits2DSlice(filename string) (units2DSlice [][]int) {
 }
 
 // readFileToByteSliceSlice - read file with os.ReadFile then create slice
+func ReadSpacesFileToIntSliceofSlices(filename string) (intSliceofSlices [][]int) {
+	theBytes := ReadFileToByteSlice(filename)
+	lines := bytes.Split(theBytes, []byte("\n"))
+	intSliceofSlices = make([][]int, 0, len(lines))
+	for _, line := range lines {
+		lineSlice := bytes.Fields(line)
+		intLine := make([]int, len(lineSlice))
+		for i, num := range lineSlice {
+			intLine[i], _ = strconv.Atoi(string(num))
+		}
+		intSliceofSlices = append(intSliceofSlices, intLine)
+	}
+	return intSliceofSlices
+}
+
+// readFileToByteSliceSlice - read file with os.ReadFile then create slice
 func ReadFileToByteSliceSlice(filename string) (byteSlice [][]byte) {
 	theBytes := ReadFileToByteSlice(filename)
 	return bytes.Split(theBytes, []byte("\n"))
@@ -64,6 +80,17 @@ func ReadFileToString(filename string) string {
 func ReadFileToStringSlice(filename string) (stringSlice []string) {
 	str := ReadFileToString(filename)
 	return strings.Split(str, "\n")
+}
+
+// ReadFileToStringSlice - read file with os.ReadFile then create slice
+func ReadFileToStringSliceofSlices(filename string) (stringSliceOfSlices [][]string) {
+	lines := ReadFileToStringSlice(filename)
+	stringSliceOfSlices = make([][]string, 0, len(lines))
+	for _, line := range lines {
+		lineSlice := strings.Fields(line)
+		stringSliceOfSlices = append(stringSliceOfSlices, lineSlice)
+	}
+	return stringSliceOfSlices
 }
 
 // ReadFileOfCommaSeperatedIntsToSlice - read ints from single line of file
