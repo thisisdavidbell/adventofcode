@@ -1,27 +1,19 @@
 package main
 
-//import (
-//	"github.com/thisisdavidbell/adventofcode/utils"
-//)
+import "fmt"
 
 func main() {
-	//	fmt.Printf("Test Part 1: %v\n", part1All("test-input.txt"))
-	//	fmt.Printf("Real Part 1: %v\n\n", part1All("real-input.txt"))
+	answer1test, answer2test := calculateAnswers("test-input.txt")
+	answer1real, answer2real := calculateAnswers("real-input.txt")
 
-	//	fmt.Printf("Test Part 2: %v\n", part2All("test-input.txt"))
-	//	fmt.Printf("Real Part 2: %v\n", part2All("test-input.txt"))
+	fmt.Printf("Test answer 1: %v\n", answer1test)
+	fmt.Printf("Test answer 2: %v\n", answer2test)
+
+	fmt.Printf("\nReal answer 1: %v\n", answer1real)
+	fmt.Printf("Real answer 2: %v\n", answer2real)
 }
 
-/*
-func part1All(filename string) (answer int) {
+func calculateAnswers(filename string) (answer1, answer2 int) {
 
-	return answer
+	return answer1, answer2
 }
-*/
-
-/*
-func part2All() () {
-
-	return
-}
-*/
